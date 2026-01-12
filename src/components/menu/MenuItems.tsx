@@ -8,92 +8,155 @@ import {
   Typography,
 } from '@mui/material';
 
-type Item = {
-  id: number;
-  name: string;
-  description: string;
-  price: string;
-  image: string;
-  category: string;
-};
-
-const items: Item[] = [
-  {
-    id: 1,
-    name: 'تشيز برجر',
-    description: 'برجر لحم، جبنة شيدر، صوص خاص',
-    price: '85 EGP',
-    image: 'https://images.unsplash.com/photo-1550547660-d9450f859349',
-    category: 'برجر',
-  },
-  {
-    id: 2,
-    name: 'دبل برجر',
-    description: 'قطعتين لحم، جبنة، خبز طازة',
-    price: '115 EGP',
-    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd',
-    category: 'برجر',
-  },
-  {
-    id: 3,
-    name: 'ساندوتش كريسبي',
-    description: 'فراخ كريسبي، خس، مايونيز',
-    price: '70 EGP',
-    image: 'https://images.unsplash.com/photo-1606755962773-d324e6a2e9b5',
-    category: 'ساندوتشات',
-  },
-];
+import { menuData } from '@/data/menu';
 
 type Props = {
   category: string;
 };
 
 export default function MenuItems({ category }: Props) {
-  const filteredItems =
+  const sections =
     category === 'الكل'
-      ? items
-      : items.filter((item) => item.category === category);
+      ? menuData
+      : menuData.filter((s) => s.category === category);
 
   return (
     <Box sx={{ px: 2, pb: 4 }}>
-      {filteredItems.map((item) => (
-        <Card
-          key={item.id}
-          sx={{
-            display: 'flex',
-            mb: 2,
-            borderRadius: 3,
-            boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
-          }}
-        >
-          <CardMedia
-            component="img"
-            image={item.image}
-            alt={item.name}
-            sx={{ width: 110 }}
-          />
-
-          <CardContent sx={{ flex: 1 }}>
-            <Typography fontWeight={600}>
-              {item.name}
-            </Typography>
-
+      {sections.map((section) => (
+        <Box key={section.category} sx={{ mb: 4 }}>
+          {/* عنوان القسم يظهر فقط في "الكل" */}
+          {category === 'الكل' && (
             <Typography
-              variant="body2"
-              color="text.secondary"
-              sx={{ my: 0.5 }}
+              sx={{
+                fontSize: {
+                  xs: 18,
+                  sm: 20,
+                  md: 22,
+                },
+                fontWeight: 800,
+                mb: 2,
+                borderRight: '4px solid #C62828',
+                pr: 1,
+              }}
             >
-              {item.description}
+              {section.category}
             </Typography>
+          )}
 
-            <Typography
-              color="primary"
-              fontWeight={600}
-            >
-              {item.price}
-            </Typography>
-          </CardContent>
-        </Card>
+          {/* GRID RESPONSIVE */}
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: {
+                xs: '1fr',
+                sm: '1fr 1fr',
+                lg: '1fr 1fr 1fr',
+              },
+              gap: 2,
+            }}
+          >
+            {section.items.map((item) => (
+              <Card
+                key={item.id}
+                sx={{
+                  display: 'flex',
+                  alignItems: 'stretch',
+                  borderRadius: 2,
+                  boxShadow: '0 4px 14px rgba(0,0,0,0.06)',
+                  backgroundColor: '#fff',
+                  overflow: 'hidden',
+                }}
+              >
+                {/* 🟨 IMAGE WRAPPER (حجم ثابت لكل المنتجات) */}
+                <Box
+                  sx={{
+                    width: {
+                      xs: 110,
+                      sm: 120,
+                      md: 140,
+                    },
+                    height: {
+                      xs: 110,
+                      sm: 120,
+                      md: 140,
+                    },
+                    flexShrink: 0,
+                  }}
+                >
+                  <CardMedia
+                    component="img"
+                    image={item.image}
+                    alt={item.name}
+                    sx={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover', // 👈 هنا السحر
+                    }}
+                  />
+                </Box>
+
+                {/* محتوى الصنف */}
+                <CardContent
+                  sx={{
+                    flex: 1,
+                    textAlign: 'right',
+                    p: {
+                      xs: 1.5,
+                      sm: 2,
+                    },
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontWeight: 700,
+                      fontSize: {
+                        xs: 15,
+                        sm: 16,
+                        md: 17,
+                      },
+                    }}
+                  >
+                    {item.name}
+                  </Typography>
+
+                  {item.description && (
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{ mt: 0.5 }}
+                    >
+                      {item.description}
+                    </Typography>
+                  )}
+
+                  <Typography
+                    sx={{
+                      color: '#C62828',
+                      fontWeight: 800,
+                      mt: 1,
+                      fontSize: {
+                        xs: 14,
+                        sm: 15,
+                        md: 16,
+                      },
+                    }}
+                  >
+                    {item.price} SAR
+                  </Typography>
+
+                  {'calories' in item && item.calories && (
+                    <Typography
+                      variant="caption"
+                      color="text.secondary"
+                    >
+                      {item.calories} سعرة حرارية
+                    </Typography>
+                  )}
+                </CardContent>
+              </Card>
+            ))}
+          </Box>
+        </Box>
       ))}
     </Box>
   );
