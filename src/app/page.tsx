@@ -32,7 +32,7 @@ export default function HomePage() {
         <Footer />
 
         <QuickActions
-          mapsUrl="https://maps.app.goo.gl/2VMfR5r6rAw6zVHH7"
+          mapsUrl="https://maps.app.goo.gl/on4e9BQkAVsMrrE87"
           phone="+966507922020"
           whatsappPhone="+966507922020"
         />
