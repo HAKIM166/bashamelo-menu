@@ -131,14 +131,14 @@ export const menuData: MenuCategory[] = [
         id: 13,
         name: 'كنزة عصير كبير',
         price: 12,
-        image: '/images/menu/juice-gallon.jpg',
+        image: '/images/menu/juice-can.jpg',
         calories: 400,
       },
       {
         id: 14,
         name: 'جالون عصير (1 لتر)',
         price: 17,
-        image: '/images/menu/juice-can.jpg',
+        image: '/images/menu/juice-gallon.jpg',
         calories: 650,
       },
             {
