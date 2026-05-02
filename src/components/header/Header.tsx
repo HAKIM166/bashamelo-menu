@@ -36,7 +36,7 @@ export default function Header() {
           </Typography>
 
           <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-            بشاميل · برجر · خلية
+           بشاميل • برجر • بيتزا 
           </Typography>
         </Box>
 

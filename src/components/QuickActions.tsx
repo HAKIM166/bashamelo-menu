@@ -7,49 +7,92 @@ import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 
 type Props = {
   mapsUrl: string;
-  phone: string;          // مثال: +9665xxxxxxx
-  whatsappPhone: string;  // مثال: 9665xxxxxxx
+  phone: string;
+  whatsappPhone: string;
 };
 
 function ActionButton({
   icon,
   label,
-  variant,
+  type,
   onClick,
   href,
 }: {
   icon: React.ReactNode;
   label: string;
-  variant: 'contained' | 'outlined';
+  type: 'whatsapp' | 'call' | 'location';
   onClick?: () => void;
   href?: string;
 }) {
+  const styles = {
+    whatsapp: {
+      main: '#25D366',
+      soft: 'rgba(37, 211, 102, 0.10)',
+      border: 'rgba(37, 211, 102, 0.45)',
+    },
+    call: {
+      main: '#2563eb',
+      soft: 'rgba(37, 99, 235, 0.09)',
+      border: 'rgba(37, 99, 235, 0.35)',
+    },
+    location: {
+      main: '#d2242a',
+      soft: 'rgba(210, 36, 42, 0.10)',
+      border: 'rgba(210, 36, 42, 0.45)',
+    },
+  }[type];
+
+  const isLocation = type === 'location';
+
   return (
     <Button
       fullWidth
-      variant={variant}
       onClick={onClick}
       component={href ? 'a' : 'button'}
       href={href}
       sx={{
         borderRadius: 999,
-        py: 1.2,
-        minHeight: 44,
-        // مهم جدًا لمنع اللزق:
+        py: { xs: 1.05, sm: 1.15 },
+        minHeight: 46,
+        backgroundColor: isLocation ? '#d2242a' : '#fff',
+        color: isLocation ? '#fff' : styles.main,
+        border: `1px solid ${isLocation ? '#d2242a' : styles.border}`,
+        boxShadow: isLocation
+          ? '0 8px 20px rgba(210,36,42,0.25)'
+          : '0 6px 16px rgba(0,0,0,0.05)',
+        fontWeight: 900,
+        fontSize: { xs: 14, sm: 15 },
+        transition: '0.2s ease',
+        '&:hover': {
+          backgroundColor: isLocation ? '#b91f24' : styles.soft,
+          borderColor: styles.main,
+          transform: 'translateY(-1px)',
+        },
         '& .btnInner': {
           display: 'inline-flex',
           alignItems: 'center',
-          gap: 1,              // المسافة بين الأيقونة والنص
+          justifyContent: 'center',
+          gap: 0.8,
           lineHeight: 1,
           whiteSpace: 'nowrap',
         },
+        '& .iconBox': {
+          width: 30,
+          height: 30,
+          borderRadius: '50%',
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: isLocation ? 'rgba(255,255,255,0.16)' : styles.soft,
+        },
         '& svg': {
-          fontSize: 22,
+          fontSize: 20,
+          color: isLocation ? '#fff' : styles.main,
         },
       }}
     >
       <span className="btnInner">
-        {icon}
+        <span className="iconBox">{icon}</span>
         {label}
       </span>
     </Button>
@@ -68,30 +111,31 @@ export default function QuickActions({ mapsUrl, phone, whatsappPhone }: Props) {
         right: 0,
         bottom: 0,
         zIndex: 9999,
-        px: 1.5,
-        py: 1.2,
-        backgroundColor: '#fff',
+        px: { xs: 1.2, sm: 2 },
+        py: 1.1,
+        backgroundColor: 'rgba(255,255,255,0.94)',
+        backdropFilter: 'blur(10px)',
         borderTop: '1px solid rgba(0,0,0,0.08)',
         display: 'flex',
-        gap: 1,
+        gap: { xs: 0.8, sm: 1.2 },
       }}
     >
       <ActionButton
-        variant="outlined"
+        type="whatsapp"
         icon={<WhatsAppIcon />}
         label="واتساب"
         onClick={() => window.open(waLink, '_blank')}
       />
 
       <ActionButton
-        variant="outlined"
+        type="call"
         icon={<CallIcon />}
         label="اتصال"
         href={`tel:${phone}`}
       />
 
       <ActionButton
-        variant="contained"
+        type="location"
         icon={<RoomIcon />}
         label="الموقع"
         onClick={() => window.open(mapsUrl, '_blank')}
