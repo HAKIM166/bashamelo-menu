@@ -6,7 +6,7 @@ The project is designed for real restaurant usage with a clean mobile-first UI, 
 
 ## Live Demo
 
-https://bashamelo-menu.vercel.app/
+https://bashamelo.com
 
 ## Features
 
