@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Bashamelo Menu
 
-## Getting Started
+A modern digital restaurant menu and ordering experience built with Next.js, TypeScript, MUI, and Zustand.
 
-First, run the development server:
+The project is designed for real restaurant usage with a clean mobile-first UI, categorized menu browsing, offers section, cart system, checkout flow, and direct WhatsApp ordering.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Live Demo
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+https://bashamelo-menu.vercel.app/
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Modern QR restaurant menu
+- Mobile-first responsive design
+- Menu categories and product sections
+- Dynamic offers section
+- Offers appear only when data exists
+- Full cart system using Zustand
+- Checkout flow with customer details
+- WhatsApp order integration
+- Structured WhatsApp message with order summary
+- Customer name, phone, order type, address, and notes
+- Pickup and delivery order support
+- Local order persistence inside the browser
+- Floating cart button
+- Clean product image layout
+- SEO optimization
+- Metadata and OpenGraph setup
+- Production-ready deployment on Vercel
 
-## Learn More
+## Customer Order Data
 
-To learn more about Next.js, take a look at the following resources:
+The checkout flow supports:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Customer name
+- Mobile number
+- Order type: Pickup or Delivery
+- Delivery address
+- Additional notes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+After checkout, the order is sent directly to WhatsApp in a clean structured message.
 
-## Deploy on Vercel
+## Tech Stack
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Next.js
+- TypeScript
+- Material UI
+- Zustand
+- React
+- Responsive UI
+- WhatsApp Ordering
+- SEO / Metadata
+- Vercel Deployment
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Project Structure
+
+The project is built with a simple and scalable structure that makes it easy to extend later with:
+
+- Admin dashboard
+- Backend API
+- Database
+- Order management system
+- Menu management panel
+- Order tracking
+
+## Purpose
+
+Bashamelo Menu was built to provide a fast, simple, and professional restaurant menu experience for customers.
+
+The main goal was to keep the design realistic, clean, and easy to use while avoiding unnecessary animations, heavy effects, or AI-generated looking interfaces.
+
+## Future Improvements
+
+- Admin panel for menu management
+- Backend order storage
+- Database integration
+- Order tracking system
+- Restaurant dashboard
+- Multi-branch support
+- Payment integration
+
+## Developer
+
+Developed by Ahmed Abdel Hakim
+
+GitHub: https://github.com/HAKIM166  
+Portfolio: https://your-portfolio-link.com
