@@ -1,7 +1,10 @@
-'use client';
+"use client";
 
-import { Box, Chip } from '@mui/material';
-import { menuData } from '@/data/menu';
+import LocalOfferOutlinedIcon from "@mui/icons-material/LocalOfferOutlined";
+import { Box, Chip } from "@mui/material";
+
+import { menuData } from "@/data/menu";
+import { offersData } from "@/data/offers";
 
 type Props = {
   selected: string;
@@ -9,74 +12,91 @@ type Props = {
 };
 
 export default function Categories({ selected, onSelect }: Props) {
-  const categories = ['الكل', ...menuData.map((c) => c.category)];
+  const hasOffers = offersData.length > 0;
+
+  const categories = [
+    ...(hasOffers ? ["العروض"] : []),
+    "الكل",
+    ...menuData.map((c) => c.category),
+  ];
 
   return (
     <Box
       sx={{
         px: 2,
         py: 1,
-
-        /* 👇 نرفعها لفوق على الشاشات الكبيرة */
-        mt: {
-          xs: 0,     // ❌ موبايل (ممنوع نلمسه)
-          md: -3,    // ✅ نرفعها لفوق
-        },
-
+        mt: { xs: 0, md: -3 },
         mb: 2,
-
-        /* توسيطها أفقيًا على الشاشات الكبيرة */
-        maxWidth: {
-          xs: '100%',
-          md: 900,
-        },
-        mx: {
-          md: 'auto',
-        },
+        maxWidth: { xs: "100%", md: 900 },
+        mx: { md: "auto" },
       }}
     >
       <Box
         sx={{
-          display: 'flex',
+          display: "flex",
           gap: 1,
-          overflowX: 'auto',
+          overflowX: "auto",
           pb: 1,
-
-          justifyContent: {
-            xs: 'flex-start', // موبايل
-            md: 'center',     // ديسكتوب / تابلت
-          },
-
-          '&::-webkit-scrollbar': {
-            display: 'none',
-          },
+          direction: "rtl",
+          justifyContent: { xs: "flex-start", md: "center" },
+          "&::-webkit-scrollbar": { display: "none" },
         }}
       >
-        {categories.map((cat) => (
-          <Chip
-            key={cat}
-            label={cat}
-            clickable
-            onClick={() => onSelect(cat)}
-            sx={{
-              fontWeight: selected === cat ? 700 : 400,
-              px: 1.5,
+        {categories.map((cat) => {
+          const isSelected = selected === cat;
+          const isOffers = cat === "العروض";
 
-              backgroundColor:
-                selected === cat ? '#C62828' : '#eee',
+          return (
+            <Chip
+              key={cat}
+              label={cat}
+              clickable
+              icon={
+                isOffers ? (
+                  <LocalOfferOutlinedIcon
+                    sx={{
+                      fontSize: "16px !important",
+                      color: isSelected ? "#fff !important" : "#1f6f43 !important",
+                    }}
+                  />
+                ) : undefined
+              }
+              onClick={() => onSelect(cat)}
+              sx={{
+                height: 34,
+                px: 1.4,
+                borderRadius: 999,
+                fontWeight: isSelected ? 800 : 500,
+                fontSize: 14,
+                backgroundColor: isSelected
+                  ? isOffers
+                    ? "#1f6f43"
+                    : "#C62828"
+                  : "#eee",
+                color: isSelected ? "#fff" : "#111",
+                border: "none",
+                boxShadow: "none",
 
-              color:
-                selected === cat ? '#fff' : '#000',
+                "& .MuiChip-label": {
+                  px: isOffers ? 0.6 : 0.8,
+                },
 
-              '&:hover': {
-                backgroundColor:
-                  selected === cat
-                    ? '#C62828'
-                    : '#e0e0e0',
-              },
-            }}
-          />
-        ))}
+                "& .MuiChip-icon": {
+                  ml: 0,
+                  mr: 0.7,
+                },
+
+                "&:hover": {
+                  backgroundColor: isSelected
+                    ? isOffers
+                      ? "#1f6f43"
+                      : "#C62828"
+                    : "#e5e5e5",
+                },
+              }}
+            />
+          );
+        })}
       </Box>
     </Box>
   );

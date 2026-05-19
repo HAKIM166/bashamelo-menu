@@ -1,19 +1,21 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Fade, Box } from '@mui/material';
+import { useState } from "react";
+import { Fade, Box } from "@mui/material";
 
-import Header from '@/components/header/Header';
-import Categories from '@/components/categories/Categories';
-import MenuItems from '@/components/menu/MenuItems';
-import SplashScreen from '@/components/SplashScreen';
-import Footer from '@/components/footer/Footer';
-
-import QuickActions from '@/components/QuickActions';
+import Header from "@/components/header/Header";
+import Categories from "@/components/categories/Categories";
+import MenuItems from "@/components/menu/MenuItems";
+import SplashScreen from "@/components/SplashScreen";
+import Footer from "@/components/footer/Footer";
+import QuickActions from "@/components/QuickActions";
+import CartButton from "@/components/cart/CartButton";
+import CartDrawer from "@/components/cart/CartDrawer";
 
 export default function HomePage() {
   const [showSplash, setShowSplash] = useState(true);
-  const [category, setCategory] = useState('الكل');
+  const [category, setCategory] = useState("الكل");
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   if (showSplash) {
     return <SplashScreen onFinish={() => setShowSplash(false)} />;
@@ -21,7 +23,6 @@ export default function HomePage() {
 
   return (
     <Fade in timeout={700}>
-      {/* pb مهم عشان الـ QuickActions اللي تحت مايغطيش آخر المنيو */}
       <Box sx={{ pb: 10 }}>
         <Header />
 
@@ -30,6 +31,10 @@ export default function HomePage() {
         <MenuItems category={category} />
 
         <Footer />
+
+        <CartButton onClick={() => setIsCartOpen(true)} hidden={isCartOpen} />
+
+        <CartDrawer open={isCartOpen} onClose={() => setIsCartOpen(false)} />
 
         <QuickActions
           mapsUrl="https://maps.app.goo.gl/on4e9BQkAVsMrrE87"
