@@ -1,8 +1,8 @@
 "use client";
 
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
-
-import { offersData } from "@/data/offers";
+import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 
 import {
   Box,
@@ -12,9 +12,8 @@ import {
   CardMedia,
   Typography,
 } from "@mui/material";
-import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
-import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 
+import { offersData } from "@/data/offers";
 import { menuData } from "@/data/menu";
 import { useCartStore } from "@/store/cart-store";
 
@@ -22,54 +21,23 @@ type Props = {
   category: string;
 };
 
-function PriceText({ price }: { price: number | string }) {
+function PriceText({ price, compact = false }: { price: number | string; compact?: boolean }) {
   const value = String(price);
   const sizes = value.match(/S\s*(\d+)\s*\|\s*L\s*(\d+)/i);
 
   if (sizes) {
     return (
-      <Box
-        sx={{
-          mt: 2,
-          display: "flex",
-          alignItems: "baseline",
-          gap: 0.7,
-          direction: "ltr",
-        }}
-      >
-        <Typography
-          component="span"
-          sx={{
-            color: "#506c5c",
-            fontWeight: 900,
-            fontSize: { xs: 14, md: 16 },
-          }}
-        >
+      <Box sx={{ mt: compact ? 1 : 2, display: "flex", alignItems: "baseline", gap: 0.7, direction: "ltr" }}>
+        <Typography component="span" sx={{ color: "#506c5c", fontWeight: 900, fontSize: { xs: 14, md: 16 } }}>
           SAR
         </Typography>
-
-        <Typography
-          component="span"
-          sx={{
-            color: "#d2242a",
-            fontWeight: 950,
-            fontSize: { xs: 18, md: 21 },
-          }}
-        >
+        <Typography component="span" sx={{ color: "#d2242a", fontWeight: 950, fontSize: { xs: 18, md: 21 } }}>
           S {sizes[1]}
         </Typography>
-
-        <Typography
-          component="span"
-          sx={{ color: "#999", fontWeight: 800, fontSize: { xs: 14, md: 16 } }}
-        >
+        <Typography component="span" sx={{ color: "#999", fontWeight: 800, fontSize: { xs: 14, md: 16 } }}>
           |
         </Typography>
-
-        <Typography
-          component="span"
-          sx={{ color: "#111", fontWeight: 950, fontSize: { xs: 18, md: 21 } }}
-        >
+        <Typography component="span" sx={{ color: "#111", fontWeight: 950, fontSize: { xs: 18, md: 21 } }}>
           L {sizes[2]}
         </Typography>
       </Box>
@@ -77,26 +45,11 @@ function PriceText({ price }: { price: number | string }) {
   }
 
   return (
-    <Box
-      sx={{
-        mt: 2,
-        display: "flex",
-        alignItems: "baseline",
-        gap: 0.7,
-        direction: "ltr",
-      }}
-    >
-      <Typography
-        component="span"
-        sx={{ color: "#506c5c", fontWeight: 900, fontSize: { xs: 14, md: 16 } }}
-      >
+    <Box sx={{ mt: compact ? 1 : 2, display: "flex", alignItems: "baseline", gap: 0.7, direction: "ltr" }}>
+      <Typography component="span" sx={{ color: "#506c5c", fontWeight: 900, fontSize: { xs: 14, md: 16 } }}>
         SAR
       </Typography>
-
-      <Typography
-        component="span"
-        sx={{ color: "#d2242a", fontWeight: 950, fontSize: { xs: 19, md: 22 } }}
-      >
+      <Typography component="span" sx={{ color: "#d2242a", fontWeight: 950, fontSize: { xs: 19, md: 22 } }}>
         {value}
       </Typography>
     </Box>
@@ -140,33 +93,12 @@ export default function MenuItems({ category }: Props) {
               }}
             >
               {section.category === "العروض" ? (
-                <LocalOfferIcon
-                  sx={{
-                    color: "#1f6f43",
-                    fontSize: { xs: 22, md: 26 },
-                    opacity: 0.9,
-                    flexShrink: 0,
-                  }}
-                />
+                <LocalOfferIcon sx={{ color: "#1f6f43", fontSize: { xs: 22, md: 26 }, opacity: 0.9, flexShrink: 0 }} />
               ) : (
-                <RestaurantMenuIcon
-                  sx={{
-                    color: "#1f6f43",
-                    fontSize: { xs: 22, md: 26 },
-                    opacity: 0.9,
-                    flexShrink: 0,
-                  }}
-                />
+                <RestaurantMenuIcon sx={{ color: "#1f6f43", fontSize: { xs: 22, md: 26 }, opacity: 0.9, flexShrink: 0 }} />
               )}
 
-              <Typography
-                sx={{
-                  fontSize: { xs: 26, md: 34 },
-                  fontWeight: 900,
-                  color: "#1f6f43",
-                  letterSpacing: "-0.5px",
-                }}
-              >
+              <Typography sx={{ fontSize: { xs: 26, md: 34 }, fontWeight: 900, color: "#1f6f43", letterSpacing: "-0.5px" }}>
                 {section.category}
               </Typography>
             </Box>
@@ -185,6 +117,11 @@ export default function MenuItems({ category }: Props) {
           >
             {section.items.map((item) => {
               const isAvailable = item.available !== false;
+              const cleanNameLength = item.name.replace(/\s/g, "").length;
+              const hasDescription = Boolean(item.description);
+              const isLongName = cleanNameLength > 11;
+              const isVeryLongName = cleanNameLength > 15;
+              const isCompactCard = hasDescription || isLongName;
 
               return (
                 <Card
@@ -217,7 +154,6 @@ export default function MenuItems({ category }: Props) {
                       height: "100%",
                       overflow: "hidden",
                       backgroundColor: "#f2f2f2",
-
                       "&::after": {
                         content: '""',
                         position: "absolute",
@@ -225,8 +161,7 @@ export default function MenuItems({ category }: Props) {
                         right: -1,
                         width: 22,
                         height: "100%",
-                        background:
-                          "linear-gradient(to right, rgba(255,255,255,0) 0%, #fff7f2 100%)",
+                        background: "linear-gradient(to right, rgba(255,255,255,0) 0%, #fff7f2 100%)",
                         pointerEvents: "none",
                       },
                     }}
@@ -254,10 +189,8 @@ export default function MenuItems({ category }: Props) {
                       justifyContent: "center",
                       overflow: "hidden",
                       position: "relative",
-                      background:
-                        "linear-gradient(135deg, #ffffff 0%, #ffffff 55%, #fff7f2 100%)",
+                      background: "linear-gradient(135deg, #ffffff 0%, #ffffff 55%, #fff7f2 100%)",
                       borderRight: "4px solid #d2242a",
-
                       "&::before": {
                         content: '""',
                         position: "absolute",
@@ -268,7 +201,6 @@ export default function MenuItems({ category }: Props) {
                         borderTop: "2px solid rgba(210,36,42,0.22)",
                         borderLeft: "2px solid rgba(210,36,42,0.22)",
                       },
-
                       "&::after": {
                         content: '""',
                         position: "absolute",
@@ -283,11 +215,22 @@ export default function MenuItems({ category }: Props) {
                     <Typography
                       sx={{
                         fontWeight: 950,
-                        fontSize: { xs: 19, md: 23 },
+                        fontSize: isVeryLongName
+                          ? { xs: 15, sm: 15.5, md: 18 }
+                          : isLongName || hasDescription
+                            ? { xs: 16.5, sm: 17, md: 20 }
+                            : { xs: 19, md: 23 },
                         color: "#111",
-                        lineHeight: 1.25,
+                        lineHeight: 1.15,
                         letterSpacing: "-0.3px",
-                        mb: 0.6,
+                        mb: 0.45,
+                        maxWidth: "100%",
+                        whiteSpace: "normal",
+                        overflow: "visible",
+                        wordBreak: "normal",
+                        overflowWrap: "break-word",
+                        position: "relative",
+                        zIndex: 1,
                       }}
                     >
                       {item.name}
@@ -299,19 +242,24 @@ export default function MenuItems({ category }: Props) {
                         height: 3,
                         backgroundColor: "#d2242a",
                         mb: 0.2,
+                        flexShrink: 0,
+                        position: "relative",
+                        zIndex: 1,
                       }}
                     />
 
-                    <PriceText price={item.price} />
+                    <PriceText price={item.price} compact={isCompactCard} />
 
                     {item.description && (
                       <Typography
                         sx={{
-                          mt: 0.8,
+                          mt: 0.45,
                           color: "#666",
                           fontSize: { xs: 12, md: 13 },
-                          lineHeight: 1.5,
+                          lineHeight: 1.35,
                           fontWeight: 700,
+                          maxHeight: 34,
+                          overflow: "hidden",
                         }}
                       >
                         {item.description}
@@ -323,38 +271,29 @@ export default function MenuItems({ category }: Props) {
                       onClick={() => addItem(item)}
                       startIcon={<AddShoppingCartIcon />}
                       sx={{
-                        mt: 1,
+                        mt: isCompactCard ? 0.6 : 1,
                         width: "fit-content",
                         minWidth: 0,
                         px: 1.4,
                         py: 0.45,
                         borderRadius: 999,
-                        backgroundColor: isAvailable
-                          ? "rgba(31,111,67,0.08)"
-                          : "#f1f1f1",
+                        backgroundColor: isAvailable ? "rgba(31,111,67,0.08)" : "#f1f1f1",
                         color: isAvailable ? "#1f6f43" : "#999",
-                        border: isAvailable
-                          ? "1px solid rgba(31,111,67,0.22)"
-                          : "1px solid #e2e2e2",
+                        border: isAvailable ? "1px solid rgba(31,111,67,0.22)" : "1px solid #e2e2e2",
                         fontWeight: 900,
                         fontSize: { xs: 11.5, md: 12.5 },
                         lineHeight: 1,
                         boxShadow: "none",
                         alignSelf: "flex-start",
-
                         "& .MuiButton-startIcon": {
                           ml: 0.5,
                           mr: 0,
                         },
-
                         "& .MuiButton-startIcon svg": {
                           fontSize: 15,
                         },
-
                         "&:hover": {
-                          backgroundColor: isAvailable
-                            ? "rgba(31,111,67,0.13)"
-                            : "#f1f1f1",
+                          backgroundColor: isAvailable ? "rgba(31,111,67,0.13)" : "#f1f1f1",
                           boxShadow: "none",
                         },
                       }}
