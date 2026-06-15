@@ -1,7 +1,14 @@
+export type MenuItemVariant = {
+  id: number;
+  label: string;
+  price: number;
+};
+
 export type MenuItem = {
   id: number;
   name: string;
-  price: number | string;
+  price?: number;
+  variants?: MenuItemVariant[];
   description?: string;
   image: string;
   available?: boolean;
@@ -19,19 +26,28 @@ export const menuData: MenuCategory[] = [
       {
         id: 1,
         name: "بشاميل لحم",
-        price: "S 15 | L 25",
+        variants: [
+          { id: 101, label: "S", price: 15 },
+          { id: 102, label: "L", price: 25 },
+        ],
         image: "/images/menu/bashamel-meat.jpg",
       },
       {
         id: 2,
         name: "بشاميل دجاج",
-        price: "S 15 | L 25",
+        variants: [
+          { id: 201, label: "S", price: 15 },
+          { id: 202, label: "L", price: 25 },
+        ],
         image: "/images/menu/bashamel-chicken.jpg",
       },
       {
         id: 3,
         name: "بشاميل روبيان",
-        price: "S 18 | L 28",
+        variants: [
+          { id: 301, label: "S", price: 18 },
+          { id: 302, label: "L", price: 28 },
+        ],
         image: "/images/menu/bashamel-shrimp.jpg",
       },
       {
@@ -207,8 +223,18 @@ export const menuData: MenuCategory[] = [
         price: 12,
         image: "/images/menu/fresh-juice-can.jpg",
       },
-      { id: 28, name: "بيبسي", price: 3, image: "/images/menu/pepsi.jpg" },
-      { id: 29, name: "ماء", price: 1, image: "/images/menu/water.jpg" },
+      {
+        id: 28,
+        name: "بيبسي",
+        price: 3,
+        image: "/images/menu/pepsi.jpg",
+      },
+      {
+        id: 29,
+        name: "ماء",
+        price: 1,
+        image: "/images/menu/water.jpg",
+      },
     ],
   },
 ];

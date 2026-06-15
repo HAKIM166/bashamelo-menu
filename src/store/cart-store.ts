@@ -1,8 +1,13 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { MenuItem } from "@/data/menu";
 
-export type CartProduct = MenuItem & {
+export type CartProduct = {
+  id: number;
+  name: string;
+  price: number;
+  image: string;
+  description?: string;
+  available?: boolean;
   orderPrice: number;
 };
 
@@ -10,19 +15,18 @@ export type CartItem = CartProduct & {
   quantity: number;
 };
 
-function getOrderPrice(price: number | string): number {
-  if (typeof price === "number") return price;
-
-  const sizes = price.match(/S\s*(\d+)\s*\|\s*L\s*(\d+)/i);
-  if (sizes) return Number(sizes[2]);
-
-  const fallback = Number(price);
-  return Number.isFinite(fallback) ? fallback : 0;
-}
+type AddToCartProduct = {
+  id: number;
+  name: string;
+  price?: number;
+  image: string;
+  description?: string;
+  available?: boolean;
+};
 
 type CartStore = {
   items: CartItem[];
-  addItem: (product: MenuItem) => void;
+  addItem: (product: AddToCartProduct) => void;
   removeItem: (id: number) => void;
   increaseQuantity: (id: number) => void;
   decreaseQuantity: (id: number) => void;
@@ -37,47 +41,71 @@ export const useCartStore = create<CartStore>()(
       items: [],
 
       addItem: (product) => {
-        const orderPrice = getOrderPrice(product.price);
+        if (typeof product.price !== "number") {
+          console.warn("Cannot add product without selected price:", product);
+          return;
+        }
 
-        set((state) => {
-          const existing = state.items.find((item) => item.id === product.id);
+        const currentItems = get().items;
+        const existing = currentItems.find((item) => item.id === product.id);
 
-          if (existing) {
-            return {
-              items: state.items.map((item) =>
-                item.id === product.id
-                  ? { ...item, quantity: item.quantity + 1 }
-                  : item
-              ),
-            };
-          }
+        if (existing) {
+          set({
+            items: currentItems.map((item) =>
+              item.id === product.id
+                ? { ...item, quantity: item.quantity + 1 }
+                : item
+            ),
+          });
 
-          return {
-            items: [...state.items, { ...product, orderPrice, quantity: 1 }],
-          };
+          return;
+        }
+
+        const newItem: CartItem = {
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          image: product.image,
+          description: product.description,
+          available: product.available,
+          orderPrice: product.price,
+          quantity: 1,
+        };
+
+        set({
+          items: [...currentItems, newItem],
         });
       },
 
-      removeItem: (id) =>
-        set((state) => ({
-          items: state.items.filter((item) => item.id !== id),
-        })),
+      removeItem: (id) => {
+        const currentItems = get().items;
 
-      increaseQuantity: (id) =>
-        set((state) => ({
-          items: state.items.map((item) =>
+        set({
+          items: currentItems.filter((item) => item.id !== id),
+        });
+      },
+
+      increaseQuantity: (id) => {
+        const currentItems = get().items;
+
+        set({
+          items: currentItems.map((item) =>
             item.id === id ? { ...item, quantity: item.quantity + 1 } : item
           ),
-        })),
+        });
+      },
 
-      decreaseQuantity: (id) =>
-        set((state) => ({
-          items: state.items
+      decreaseQuantity: (id) => {
+        const currentItems = get().items;
+
+        set({
+          items: currentItems
             .map((item) =>
               item.id === id ? { ...item, quantity: item.quantity - 1 } : item
             )
             .filter((item) => item.quantity > 0),
-        })),
+        });
+      },
 
       clearCart: () => set({ items: [] }),
 
